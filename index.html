@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pomodoro Timer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="lang-switch" id="langSwitch">
+    <button type="button" data-lang="sr">SR</button>
+    <button type="button" data-lang="en">EN</button>
+  </div>
+
+  <div class="layout">
+  <main class="app">
+    <h1>🍅 Pomodoro</h1>
+
+    <div class="modes">
+      <button class="mode active" data-mode="focus" data-min="25" data-i18n="mode_focus">Fokus</button>
+      <button class="mode" data-mode="short" data-min="5" data-i18n="mode_short">Kratka pauza</button>
+      <button class="mode" data-mode="long" data-min="15" data-i18n="mode_long">Duga pauza</button>
+    </div>
+
+    <div class="settings">
+      <label><span data-i18n="set_focus">Fokus</span>
+        <input type="number" id="focusMin" min="1" max="180" value="25" /> min
+      </label>
+      <label><span data-i18n="set_short">Kratka</span>
+        <input type="number" id="shortMin" min="1" max="60" value="5" /> min
+      </label>
+      <label><span data-i18n="set_long">Duga</span>
+        <input type="number" id="longMin" min="1" max="60" value="15" /> min
+      </label>
+    </div>
+
+    <input type="text" id="taskInput" class="task-input" data-i18n-placeholder="task_placeholder" placeholder="Na čemu radiš?" maxlength="80" />
+
+    <div class="timer" id="timer">25:00</div>
+
+    <div class="controls">
+      <button id="startBtn" class="btn primary">Start</button>
+      <button id="resetBtn" class="btn" data-i18n="btn_reset">Reset</button>
+      <button id="skipBtn" class="btn" data-i18n="btn_skip">Preskoči ⏭</button>
+    </div>
+
+    <p class="status" id="status">Spremno za fokus.</p>
+
+    <label class="auto">
+      <input type="checkbox" id="autoStart" checked />
+      <span data-i18n="auto_label">Automatski nastavi cikluse</span>
+    </label>
+
+    <button id="notifyBtn" class="btn ghost">🔔 Uključi obaveštenja</button>
+
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-num" id="statToday">0</span>
+        <span class="stat-label" data-i18n="stat_today">min danas</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num" id="statWeek">0</span>
+        <span class="stat-label" data-i18n="stat_week">min ove nedelje</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num" id="count">0</span>
+        <span class="stat-label" data-i18n="stat_total">ciklusa ukupno</span>
+      </div>
+    </div>
+
+    <button id="resetCountBtn" class="btn ghost" data-i18n="reset_count">↺ Resetuj brojač</button>
+
+    <p class="hint" data-i18n-html="hint">Prečice: <kbd>Space</kbd> start/pauza · <kbd>R</kbd> reset · <kbd>S</kbd> preskoči</p>
+  </main>
+
+  <aside class="side-panel" id="doneTasks" hidden>
+    <p class="done-title" data-i18n="done_title">Odrađeno danas</p>
+    <ul id="doneList"></ul>
+  </aside>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
