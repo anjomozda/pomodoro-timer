@@ -20,11 +20,11 @@ const durationInputs = {
   long: document.getElementById("longMin"),
 };
 
-// nakon koliko fokusa ide duga pauza
+// how many focus sessions before a long break
 const LONG_BREAK_EVERY = 4;
 const STORAGE_KEY = "pomodoro-state";
 
-// trajanja u minutama po modu (default; prepisuje se iz localStorage)
+// durations in minutes per mode (defaults; overwritten from localStorage)
 const DURATIONS = { focus: 25, short: 5, long: 15 };
 
 let totalSeconds = DURATIONS.focus * 60;
@@ -34,12 +34,12 @@ let running = false;
 let currentMode = "focus";
 let completed = 0;
 let autoTimeoutId = null;
-let history = {}; // { "2026-07-13": fokus-minute }
+let history = {}; // { "2026-07-13": focus-minutes }
 let log = []; // [{ date, task, min }]
 let lang = "sr";
 let statusState = { key: "ready", mode: "focus", secs: null };
 
-/* ---------- Prevodi ---------- */
+/* ---------- Translations ---------- */
 
 const I18N = {
   sr: {
@@ -128,7 +128,7 @@ function modeLabel(mode) {
   return t("label_" + mode);
 }
 
-/* ---------- Datumi ---------- */
+/* ---------- Dates ---------- */
 
 function dateKey(d) {
   const y = d.getFullYear();
@@ -152,7 +152,7 @@ function lastNKeys(n) {
   return keys;
 }
 
-/* ---------- Spremanje / učitavanje ---------- */
+/* ---------- Save / load ---------- */
 
 function saveState() {
   try {
@@ -168,7 +168,7 @@ function saveState() {
       })
     );
   } catch (e) {
-    /* localStorage nedostupan */
+    /* localStorage unavailable */
   }
 }
 
@@ -188,11 +188,11 @@ function loadState() {
     if (Array.isArray(saved.log)) log = saved.log;
     if (saved.lang === "sr" || saved.lang === "en") lang = saved.lang;
   } catch (e) {
-    /* neispravan zapis */
+    /* invalid saved data */
   }
 }
 
-/* ---------- Prikaz ---------- */
+/* ---------- Rendering ---------- */
 
 function format(sec) {
   const m = String(Math.floor(sec / 60)).padStart(2, "0");
@@ -246,7 +246,7 @@ function renderDoneList() {
   }
 }
 
-/* ---------- Jezik ---------- */
+/* ---------- Language ---------- */
 
 function applyLanguage() {
   document.documentElement.lang = lang;
@@ -279,7 +279,7 @@ function setLanguage(newLang) {
   saveState();
 }
 
-/* ---------- Tajmer ---------- */
+/* ---------- Timer ---------- */
 
 function tick() {
   if (remaining > 0) {
@@ -323,7 +323,7 @@ function skip() {
   setStatus("status_skipped", currentMode);
 }
 
-/* ---------- Obaveštenja (zvuk + browser notifikacija) ---------- */
+/* ---------- Notifications (sound + browser notification) ---------- */
 
 function playChime() {
   try {
@@ -338,7 +338,7 @@ function playChime() {
     osc.start();
     osc.stop(ctx.currentTime + 1);
   } catch (e) {
-    /* audio nije dostupan */
+    /* audio not available */
   }
 }
 
@@ -350,7 +350,7 @@ function notify(doneMode, nextModeName) {
       icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🍅%3C/text%3E%3C/svg%3E",
     });
   } catch (e) {
-    /* notifikacija nije dostupna */
+    /* notification not available */
   }
 }
 
@@ -372,9 +372,9 @@ function updateNotifyBtn() {
   }
 }
 
-/* ---------- Ciklusi ---------- */
+/* ---------- Cycles ---------- */
 
-// odabir sledećeg moda na osnovu trenutnog i broja odrađenih fokusa
+// pick the next mode based on the current one and the number of completed focus sessions
 function nextMode() {
   if (currentMode === "focus") {
     return completed % LONG_BREAK_EVERY === 0 ? "long" : "short";
@@ -435,7 +435,7 @@ function setMode(mode) {
   render();
 }
 
-/* ---------- Postavke trajanja ---------- */
+/* ---------- Duration settings ---------- */
 
 function syncInputs() {
   for (const mode of ["focus", "short", "long"]) {
@@ -453,7 +453,7 @@ function handleDurationChange(mode) {
   input.value = v;
   DURATIONS[mode] = v;
   saveState();
-  // ako menjamo trenutni mod dok ne radi tajmer, osveži prikaz
+  // if we change the current mode while the timer isn't running, refresh the display
   if (mode === currentMode && !running) {
     totalSeconds = v * 60;
     remaining = totalSeconds;
@@ -461,7 +461,7 @@ function handleDurationChange(mode) {
   }
 }
 
-/* ---------- Događaji ---------- */
+/* ---------- Events ---------- */
 
 modeButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
@@ -496,7 +496,7 @@ langSwitch.querySelectorAll("button").forEach((b) => {
   b.addEventListener("click", () => setLanguage(b.dataset.lang));
 });
 
-// prečice na tastaturi — ne hvataj dok korisnik kuca u polju
+// keyboard shortcuts — don't capture while the user is typing in a field
 document.addEventListener("keydown", (e) => {
   const tag = (e.target.tagName || "").toLowerCase();
   if (tag === "input" || tag === "textarea") return;
@@ -510,7 +510,7 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-/* ---------- Početno stanje ---------- */
+/* ---------- Initial state ---------- */
 
 loadState();
 syncInputs();
