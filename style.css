@@ -4,14 +4,28 @@
   padding: 0;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+button,
+.mode,
+.btn {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
 body {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   min-height: 100vh;
+  min-height: 100dvh;
   display: grid;
   place-items: center;
   background: #1e1b2e;
   color: #f5f5f5;
   transition: background 0.4s ease;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+           env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
 body.focus  { background: #40263a; }
@@ -20,8 +34,8 @@ body.long   { background: #26314a; }
 
 .lang-switch {
   position: fixed;
-  top: 1rem;
-  right: 1rem;
+  top: calc(1rem + env(safe-area-inset-top));
+  right: calc(1rem + env(safe-area-inset-right));
   display: flex;
   gap: 0.25rem;
   padding: 0.25rem;
@@ -279,9 +293,73 @@ h1 {
 }
 
 @media (max-width: 640px) {
+  .layout {
+    padding: 1rem 0.9rem;
+    gap: 1rem;
+  }
+
+  .app {
+    width: 100%;
+    max-width: 440px;
+    padding: 1.75rem 1.25rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .timer {
+    font-size: 4.2rem;
+    margin: 0.75rem 0 1.5rem;
+  }
+
+  .modes {
+    flex-wrap: wrap;
+  }
+
+  /* Dugmad rasporedjena na celu sirinu, veca za prst */
+  .controls {
+    flex-wrap: wrap;
+  }
+  .controls .btn {
+    flex: 1 1 30%;
+    padding: 0.9rem 0.75rem;
+  }
+
+  .task-input {
+    /* 16px sprecava automatski zum na iPhone-u pri kucanju */
+    font-size: 16px;
+  }
+  .settings input {
+    font-size: 16px;
+    width: 3.6rem;
+    padding: 0.45rem 0.4rem;
+  }
+
+  .stats {
+    gap: 1.1rem;
+  }
+
+  /* Precice sa tastature nemaju smisla na telefonu */
+  .hint {
+    display: none;
+  }
+
   .side-panel {
     width: 100%;
-    max-width: 380px;
+    max-width: 440px;
+  }
+}
+
+/* Vrlo uski telefoni — da tajmer ne prelazi ivicu */
+@media (max-width: 360px) {
+  .timer {
+    font-size: 3.4rem;
+    letter-spacing: 1px;
+  }
+  .app {
+    padding: 1.5rem 1rem;
   }
 }
 
