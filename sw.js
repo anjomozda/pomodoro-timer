@@ -1,5 +1,5 @@
 // Bump ovu verziju kad promeniš fajlove, da se keš osveži.
-const CACHE = "pomodoro-v1";
+const CACHE = "pomodoro-v2";
 const ASSETS = [
   "./",
   "./index.html",
